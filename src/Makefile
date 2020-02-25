@@ -9,7 +9,7 @@ CFLAGS=-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector
 LDFLAGS=-Tlink.ld -melf_i386
 ASFLAGS=-felf
 
-all: $(SOURCES) link
+all:$(SOURCES) link
 
 clean:
 	-rm *.o kernel
@@ -17,5 +17,3 @@ clean:
 link:
 	ld $(LDFLAGS) -o kernel $(SOURCES)
 
-.s.o:
-	nasm $(ASFLAGS) $<
