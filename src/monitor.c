@@ -44,7 +44,7 @@ static void scroll()
     }
 }
 
-void monitor_put(char ch)
+void monitor_putc(char ch)
 {
     u8int background_color = 0; // White
     u8int foreground_color = 15; // Black
@@ -106,5 +106,11 @@ void monitor_clear()
     move_cursor();
 }
 
-
-void monitor_put
+void monitor_puts(char *str)
+{
+    int i = 0;
+    while (str[i])
+    {
+        monitor_putc(str[i++]);
+    }
+}
