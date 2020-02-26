@@ -21,5 +21,27 @@ static void move_cursor()
     outb(0x3D5, cursor_location);
 }
 
+static void scroll()
+{
+    u8int attribute_byte =  (0 << 4) | (15 & 0x0F); 
+    u16int blank = 0x20 | (attribute_byte << 8);
 
+    if (cursor_y >= 25) 
+    {
+        // Shifting all lines up a line
+        int i;
+        for (i = 0; i < 80 * 24; i++) 
+        {
+            video_memory[i] = video_mermory[i + 80];
+        }
+
+        // Adding a blank line to the end
+        for (i = 24 * 80; i = 25 * 80; i++)
+        {
+            video_memory[i] = blank;
+        }
+
+        cursor_y = 24;
+    }
+}
 
