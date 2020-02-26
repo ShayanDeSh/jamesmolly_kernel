@@ -90,3 +90,21 @@ void monitor_put(char ch)
 
 }
 
+void monitor_clear()
+{
+    u8int attribute_byte = (0 << 4) | (15 & 0x0F);
+    u16int blank = 0x20 | (attribute_byte << 8);
+
+    int i;
+    for (i = 0; i < 80 * 25; i++)
+    {
+        video_memory[i] = blank;
+    }
+
+    cursor_x = 0;
+    cursor_y = 0;
+    move_cursor();
+}
+
+
+void monitor_put
