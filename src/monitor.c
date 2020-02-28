@@ -2,9 +2,9 @@
  * Displaying things on monitor
 */
 
-#include "moitor.h"
+#include "monitor.h"
 
-u16int *video_memory = (u16int*)0xBD8000;
+u16int *video_memory = (u16int *)0xB8000;
 
 u8int cursor_x = 0;
 u8int cursor_y = 0;
@@ -49,7 +49,7 @@ void monitor_putc(char ch)
     u8int background_color = 0; // White
     u8int foreground_color = 15; // Black
 
-    u16int attribute_byte = (background_color << 4) | (u8int foreground_color & 0X0F);
+    u16int attribute_byte = (background_color << 4) | (foreground_color & 0X0F);
     attribute_byte = attribute_byte << 8;
     u16int *location;
     
