@@ -8,4 +8,5 @@ Hope, I continue working on it.
 
 - For learning GDT
   - https://www.linkedin.com/pulse/gdt-segmentation-linux-sunny-shah/
+  - https://stackoverflow.com/questions/23978486/far-jump-in-gdt-in-bootloader
  
