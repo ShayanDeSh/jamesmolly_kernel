@@ -42,11 +42,11 @@ typedef struct gdt_ptr_struct gdt_ptr_t;
 
 struct idt_entry_struct
 {
-    u16int base_lo;
-    u16int sel;
-    u8int  always0;
-    u8int  flags;
-    u16int base_hi;
+    u16int base_lo; // low bits of offset to isr
+    u16int sel; // selector into gdt
+    u8int  always0; // unused must be 0
+    u8int  flags; // type s dpl p
+    u16int base_hi; // high bits of offset to isr
 } __attribute__((packed));
 typedef struct idt_entry_struct idt_entry_t;
 
