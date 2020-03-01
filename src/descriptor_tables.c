@@ -3,15 +3,23 @@
 #include "descriptor_tables.h"
 
 extern void gdt_flush(u32int);
+extern void idt_flush(u32int);
 
 static void init_gdt();
 static void gdt_set_gate(u8int, u32int, u32int, u8int, u8int);
 
+static void init_idt();
+static void idt_set_gate(u8int, u32int, u16int, u8int)
+
 gdt_entry_t gdt_entries[5];
 gdt_ptr_t   gdt_ptr;
 
+idt_entry_t idt_entries[256];
+idt_ptr_t   idt_ptr;
+
 void init_descriptor_tables() {
     init_gdt();
+    init_idt();
 }
 
 static void init_gdt()
@@ -28,7 +36,8 @@ static void init_gdt()
     gdt_flush((u32int)&gdt_ptr);
 }
 
-static void gdt_set_gate(u8int num, u32int base, u32int limit, u8int access, u8int gran)
+static void gdt_set_gate(u8int num, u32int base, u32int limit,
+                         u8int access, u8int gran)
 {
     gdt_entries[num].base_low     = (base & 0xFFFF);
     gdt_entries[num].base_middle  = (base >> 16) & 0xFF;
@@ -39,4 +48,57 @@ static void gdt_set_gate(u8int num, u32int base, u32int limit, u8int access, u8i
     
     gdt_entries[num].granularity |= gran & 0xF0;
     gdt_entries[num].access       = access;
+}
+
+static void init_idt() 
+{
+    idt_ptr.base = (u32int) &idt_entries;
+    idt_ptr.limit = sizeof(idt_entries) * 256 - 1;
+
+    memset(&idt_entries, 0, sizeof(gdt_entries) * 256);
+
+    idt_set_gate(0 , (u32int) isr0, 0x08, 0x08E); // 0x08 select the code segment in gdt
+    idt_set_gate(1 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(2 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(3 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(4 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(5 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(6 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(8 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(9 , (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(10, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(10, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(11, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(12, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(13, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(14, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(15, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(16, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(17, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(18, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(19, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(20, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(21, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(22, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(23, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(24, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(25, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(26, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(27, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(28, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(29, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(30, (u32int) isr0, 0x08, 0x08E); 
+    idt_set_gate(31, (u32int) isr0, 0x08, 0x08E); 
+
+    idt_flusth((u32int) &idt_entries);
+}
+
+
+static void idt_set_gate(u8int num, u32int base, u16int sel, u8int flag)
+{
+    idt_entries[num].base_lo = base && 0xFFFF;
+    idt_entries[num].base_hi = ( base >> 16 ) & 0xFFFF;
+    idt_entries[num].sel     = sel;
+    idt_entries[num].always0 = 0;
+    idt_entries[num].flags   = 0; // | 0x60; unoment this for third rign level
 }
