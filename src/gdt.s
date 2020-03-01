@@ -5,6 +5,7 @@
 
 
 [GLOBAL gdt_flush]
+[GLOBAL idt_flush]
 
 get_flush:
 	mov eax, [esp + 4]
@@ -19,4 +20,9 @@ get_flush:
 	mov ss, ax
 	jmp 0x08:.flush ; Loading the CS reg with 0x08 and IP with .flush location
 .flush:
+	ret
+
+idt_flush:
+	mov eax, [esp + 4]
+	lidt [eax]
 	ret

@@ -89,7 +89,7 @@ static void init_idt()
     idt_set_gate(30, (u32int) isr30, 0x08, 0x08E); 
     idt_set_gate(31, (u32int) isr31, 0x08, 0x08E); 
 
-    idt_flusth((u32int) &idt_entries);
+    idt_flush((u32int) &idt_entries);
 }
 
 
