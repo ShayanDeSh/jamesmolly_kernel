@@ -114,3 +114,30 @@ void monitor_puts(char *str)
         monitor_putc(str[i++]);
     }
 }
+
+void monitor_putd(u32int num) 
+{
+    u32int tmp = num;
+    
+    if(num == 0) 
+    {
+        monitor_putc('0');
+        return;
+    }
+
+    char[32] char_num;
+    int i = 0;
+    while (tmp != 0)
+    {
+        c[i] = tmp % 10 + '0';
+        tmp /= 10;
+        i++;
+    }
+    char_num[i] = 0;
+    
+    char[32] char_num_inv;
+    char_num_inv[i--] = 0;
+    for(; i >= 0; i--)
+        char_num_inv[i] = char_num[i];
+    monitor_puts(char_num_inv);
+}

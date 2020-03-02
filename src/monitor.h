@@ -12,4 +12,6 @@ void monitor_clear();
 // Write a null terminated string
 void monitor_puts(char *str);
 
+void monitor_putd(u32int num);
+
 #endif
